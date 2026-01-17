@@ -192,6 +192,9 @@ user=$(grep -E "^#sswg " "/etc/xray/config.json" | cut -d ' ' -f 2 | sed -n "${C
 exp=$(grep -E "^#sswg " "/etc/xray/config.json" | cut -d ' ' -f 3 | sed -n "${CLIENT_NUMBER}"p)
 sed -i "/^#sswg $user $exp/,/^},{/d" /etc/xray/config.json
 sed -i "/^#ssw $user $exp/,/^},{/d" /etc/xray/config.json
+if [ -f "/etc/xray/user-limit-ssws" ]; then
+        sed -i "/^$user /d" /etc/xray/user-limit-ssws
+fi
 rm -f /etc/xray/vmess-$user-tls.json /etc/xray/vmess-$user-nontls.json
 systemctl restart xray.service
 clear

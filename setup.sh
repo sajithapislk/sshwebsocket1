@@ -183,6 +183,7 @@ wget -q -O /usr/bin/add-trgo "https://raw.githubusercontent.com/NevermoreSSH/Blu
 wget -q -O /usr/bin/autoreboot "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/autoreboot.sh"
 wget -q -O /usr/bin/restart "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/restart.sh"
 wget -q -O /usr/bin/tendang "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/tendang.sh"
+wget -q -O /usr/bin/limit-ssws "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/limit-ssws.sh"
 wget -q -O /usr/bin/clearlog "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/clearlog.sh"
 wget -q -O /usr/bin/running "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/running.sh"
 wget -q -O /usr/bin/cek-trafik "https://raw.githubusercontent.com/NevermoreSSH/Blueblue/main/cek-trafik.sh"
@@ -221,6 +222,7 @@ chmod +x /usr/bin/usernew
 chmod +x /usr/bin/autoreboot
 chmod +x /usr/bin/restart
 chmod +x /usr/bin/tendang
+chmod +x /usr/bin/limit-ssws
 chmod +x /usr/bin/clearlog
 chmod +x /usr/bin/running
 chmod +x /usr/bin/cek-trafik

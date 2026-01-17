@@ -99,7 +99,30 @@ v2ray-menu
 cipher="aes-128-gcm"
 uuid=$(cat /proc/sys/kernel/random/uuid)
 read -p "Expired (days): " masaaktif
+read -p "Connection limit (devices) [1]: " limitconn
+case "$limitconn" in
+"" ) limitconn=1 ;;
+*[!0-9]* ) limitconn=1 ;;
+esac
 exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
+limit_file="/etc/xray/user-limit-ssws"
+mkdir -p /etc/xray
+if [ -f "$limit_file" ]; then
+	grep -v "^$user " "$limit_file" > "${limit_file}.tmp"
+	mv "${limit_file}.tmp" "$limit_file"
+fi
+echo "$user $limitconn" >> "$limit_file"
+limit_cmd="/usr/bin/limit-ssws"
+cron_file="/etc/cron.d/limit-ssws"
+if [ -x "$limit_cmd" ]; then
+	if [ ! -f "$cron_file" ]; then
+		echo "# Limit SSWS" > "$cron_file"
+		echo "* * * * * root $limit_cmd" >> "$cron_file"
+		chmod +x "$cron_file"
+		service cron reload >/dev/null 2>&1
+		service cron restart >/dev/null 2>&1
+	fi
+fi
 sed -i '/#ssws$/a\#ssw '"$user $exp"'\
 },{"password": "'""$uuid""'","method": "'""$cipher""'","email": "'""$user""'"' /etc/xray/config.json
 sed -i '/#ssgrpc$/a\#sswg '"$user $exp"'\
@@ -363,6 +386,8 @@ echo -e "Link JSON WS : http://${domain}:81/sodosokws-$user.txt" | tee -a /etc/l
         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo -e "Link JSON gRPC : http://${domain}:81/sodosokgrpc-$user.txt" | tee -a /etc/log-create-user.log
         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+echo -e "Connection Limit : $limitconn" | tee -a /etc/log-create-user.log
+        echo -e "\033[0;34m?"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"??"?\033[0m"
 echo -e "Expired On : $exp" | tee -a /etc/log-create-user.log
         echo -e "\033[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 echo "" | tee -a /etc/log-create-user.log
